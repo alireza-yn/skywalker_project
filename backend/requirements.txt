@@ -1,0 +1,14 @@
+django
+twisted[http2]
+django-cors-headers
+daphne 
+channels 
+python-socketio 
+eventlet
+djangorestframework
+django-filter
+markdown
+pillow
+djangorestframework-simplejwt
+drf-spectacular
+drf-spectacular[sidecar]

@@ -51,10 +51,11 @@ const SockectTest = (props: Props) => {
         socket.emit("join",{uuid:Cookies.get("uuid")})
         socket.on("welcome",(payload)=>{
             setWelcome(payload)
+          
         })
 
         socket.on("response",(payload)=>{
-            // console.log(payload)
+            console.log(payload)
         })
     },[])
 

@@ -12,6 +12,7 @@ const ChatSpcket = (props: Props) => {
 
     useEffect(()=>{
         socket.on("response",(payload)=>{
+            console.log(payload)
             setChat((prev)=>[
                 ...prev,payload
             ])
@@ -22,8 +23,8 @@ const ChatSpcket = (props: Props) => {
     <div>
         {chat && chat.map((message:any,index)=>{
             return(
-                <div key={index}>
-                    <span>{message.sender_uuid} : {message.message}</span>
+                <div key={index + 1}>
+                    <span>{message.sender_uuid} : {message.message} - {index + 1}</span>
                 </div>
             )
         })}

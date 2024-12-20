@@ -2,6 +2,8 @@ from asgiref.sync import sync_to_async
 from skywalker.socketio_server import sio
 from auths.serializers import UserSerializer, CustomUser
 # دیکشنری برای نگهداری کاربران آنلاین با UUID
+import asyncio
+import time
 online_users = {}
 
 @sio.event
@@ -51,7 +53,9 @@ async def message(sid, data):
 
     if receiver_uuid in online_users:
         target_sid = online_users[receiver_uuid]
-
         await sio.emit('response', {'message': message, 'sender_uuid': sender_uuid, 'receiver_info': reciver_serializer}, to=target_sid)
     else:
         print(f"User with UUID {receiver_uuid} is not online.")
+
+
+    # می‌توانید عملکردهای دیگر را نیز به همین صورت اضافه کنید

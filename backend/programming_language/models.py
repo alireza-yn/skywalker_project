@@ -1,0 +1,40 @@
+from django.db import models
+
+# Create your models here.
+class ProgrammingLanguage(models.Model):
+    LEVEL_CHOICES = [
+        ('beginner', 'مقدماتی'),
+        ('intermediate', 'متوسط'),
+        ('advanced', 'پیشرفته'),
+    ]
+
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to='static/programming_language/', null=True, blank=True)
+    video = models.FileField(upload_to='static/programming_language/', null=True, blank=True)
+    level = models.CharField(
+        max_length=20,
+        choices=LEVEL_CHOICES,
+        default='beginner',  # مقدار پیش‌فرض
+    )
+
+    def __str__(self):
+        return f"{self.name} - {self.level}"
+ 
+class ProgrammerSkill (models.Model):
+    SKILL_LEVEL = [
+        ('beginner', 'مقدماتی'),
+        ('intermediate', 'متوسط'),
+        ('advanced', 'پیشرفته')
+    ]
+    name = models.CharField(max_length=100)
+    skill_level = models.CharField(max_length=20, choices=SKILL_LEVEL, default='beginner')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.name
+
+
+

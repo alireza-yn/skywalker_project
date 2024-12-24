@@ -11,7 +11,7 @@
   },
   "include": [
     "**/*.ts"
-  ],
+, "db/mongo.ts"  ],
   "exclude": [
     "node_modules"
   ]

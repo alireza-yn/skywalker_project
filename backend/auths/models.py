@@ -6,6 +6,7 @@ from django.core.validators import RegexValidator
 from datetime import datetime
 import os
 import uuid
+from programming_language.models import *
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -43,13 +44,11 @@ class CustomUserManager(BaseUserManager):
 
         user.save(using=self._db)
         return user
-    
-
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_validator = RegexValidator(regex=r'^09\d{9}$', message="Phone number must be 11 digits.")
     username = models.CharField(unique=True, null=True, blank=True, max_length=50)
-    email = models.EmailField(unique=True, blank=False)
+    email = models.EmailField(unique=True, blank=False,null=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     user_phone = models.CharField(max_length=11, unique=True, validators=[phone_validator])
@@ -94,7 +93,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username if self.username else self.email
 
-
 class OTP(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     otp_code = models.CharField(max_length=6)
@@ -103,3 +101,11 @@ class OTP(models.Model):
     class Meta:
         verbose_name = "One-Time Password"
         verbose_name_plural = "One-Time Passwords"
+
+class Role(models.Model):
+    name = models.CharField(max_length=50,unique=True)
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name="user_roles",blank=True)
+
+    def __str__(self):
+        return self.name
+

@@ -1,13 +1,20 @@
-// src/app.ts
+import express, { Application } from 'express';
+import connectDB from './db/mongo';
+import userRoutes from './routes/users';
 
-import express, { Request, Response } from 'express';
-import usersRouter from './routes/users';
+const app: Application = express();
+const PORT: number = 3000;
 
-const app = express();
-const port = 3000;
+// اتصال به MongoDB
+connectDB();
 
-app.use('/users', usersRouter);
+// میدل‌ورها
+app.use(express.json());
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+// مسیرها
+app.use('/api/users', userRoutes);
+
+// شروع سرور
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

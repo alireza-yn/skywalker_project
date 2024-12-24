@@ -11,34 +11,44 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
+import { FormEvent, useRef, useState } from "react";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "../../ui/input-otp";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { log } from "console";
+import { ArrowLeft, Loader2Icon } from "lucide-react";
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
 
-    const [phone, setPhone] = useState("09398231219");
+    const phone = useRef<HTMLInputElement | null>(null)
+    const [phone_number, setPhone] = useState("")
     const [value, setValue] = useState("")
     const [showOtp, setShowOtp] = useState(false)
+    const [loading, setLoading] = useState(false)
 
-
-    const loginHandler = async ()=>{
+    const loginHandler = async (e:FormEvent)=>{
+      e.preventDefault()
+      setShowOtp(true)
+      setLoading(true)
+      setPhone(phone.current?.value || "")
         try {
             const request = await axios.post(`${process.env.server}/auths/login/`, {
-                phone: phone,
+                phone: phone.current?.value
             })
             const response = await request.data
             console.log(response);
             if (response.status == 200 || response.status == 201){
-                Cookies.set("token",response.access)
                 setShowOtp(true)
+                setLoading(false)
             }
         } catch (err: any) {
+          setLoading(false)
+          
             if (err?.response.status == 401){
                 console.log(err)
+                
             }
             else if (err?.response.status == 400){
                 console.log(err)
@@ -47,13 +57,48 @@ export function SignUpForm({
                 console.log(err)
         }
     }
+    finally{
+      setLoading(false)
+
     }
+    }
+
+
+    const verifyOtpHandler = async (e:FormEvent)=>{
+        e.preventDefault()
+        setLoading(true)
+        try {
+            const request = await axios.post(`${process.env.server}/auths/verify_otp/`, {
+                phone: phone.current?.value,
+                otp:value
+            })
+            const response = await request.data
+            console.log(response);
+  
+            if (response.success){
+                Cookies.set("token", response.access)
+            }
+        } catch (err: any) {
+          setLoading(false)
+
+            if (err?.response.status == 401){
+                console.log(err)
+            }
+            else if (err?.response.status == 400){
+                console.log(err)
+
+            }
+          } finally{
+            setLoading(false)
+          }
+        }
+
   return (
-    <div className={cn(`${showOtp ? "hidden" : "flex"} flex-col gap-6`, className)} {...props}>
-      <div className="w-auto h-auto">
+    <div className={cn(`flex flex-col gap-6`, className)} {...props}>
+      <div className={`w-auto h-auto ${showOtp ? "hidden" : ""}`}>
         <Card className="overflow-hidden">
           <CardContent className="grid p-0 md:grid-cols-2">
-            <form className="p-6 md:p-8">
+            <form className="p-6 md:p-8" onSubmit={loginHandler}>
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
                   <h1 className="text-2xl font-bold">به دیباگچی خوش آمدید</h1>
@@ -68,11 +113,15 @@ export function SignUpForm({
                     type="text"
                     placeholder="09xxxxxxxxx"
                     required
+                    ref={phone}
                   />
                 </div>
                
-                <Button type="submit" className="w-full">
-                  ورود
+                <Button type="submit" className="w-full flex gap-5">
+                  <span>ورود</span>
+                  {loading &&
+                  <Loader2Icon className="animate-spin duration-500"/>
+                  }
                 </Button>
              
               </div>
@@ -92,10 +141,24 @@ export function SignUpForm({
         </div>
       </div>
 
-      <Card className={`${showOtp ? "flex" : "hidden"}}`}>
+      <Card className={`${showOtp ? "flex flex-col" : "hidden"}`}>
         <CardHeader>
-          <CardTitle>کد تایید</CardTitle>
-          <CardDescription>کد شش رقمی برای شماره تلفن {phone} ارسال شده</CardDescription>
+          <CardTitle>
+            <span className="flex-1">
+              کد تایید
+              </span>
+              <Button><span>
+                بازگشت</span>
+                
+                <ArrowLeft className="w-4 h-4 ml-2" />
+                </Button>
+            </CardTitle>
+          <CardDescription>
+            <p>
+
+            کد شش رقمی برای شماره تلفن {phone.current?.value} ارسال شده
+            </p>
+            </CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center items-center">
         <div className="space-y-2" dir="ltr">
@@ -117,8 +180,14 @@ export function SignUpForm({
      
     </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full">تایید</Button>
+        <CardFooter className="flex flex-col">
+
+          <Button className="w-full flex-1" onClick={verifyOtpHandler}>
+            <span>تایید</span>
+            {loading &&
+                  <Loader2Icon className="animate-spin duration-500"/>
+                  }
+          </Button>
         </CardFooter>
       </Card>
     </div>

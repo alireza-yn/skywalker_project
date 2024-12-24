@@ -40,13 +40,17 @@ class CustomLoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         user = User.objects.filter(user_phone=phone).first()
+        otp_exist = OTP.objects.filter(user=user).first()
+        if otp_exist:
+            otp_exist.delete()
+        
         otp_code = random.randint(100000, 999999)
         if user:
             otp = OTP.objects.create(user=user, otp_code=otp_code)
             if otp:
                 return Response(
                     {"success": True, "otp": otp.otp_code},
-                    status=status.HTTP_201_CREATED,
+                    status=status.HTTP_200_OK,
                 )
         else:
             new_user = User.objects.create(user_phone=phone)

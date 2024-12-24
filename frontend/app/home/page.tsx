@@ -1,5 +1,5 @@
-import AddFriend from '@/components/cards/AddFriend'
-import CardsC from '@/components/cards/CardsC'
+import AddFriend from '@/components/Tools/cards/AddFriend'
+import CardsC from '@/components/Tools/cards/CardsC'
 import DottedBox from '@/components/Tools/DottedBox'
 import React from 'react'
 

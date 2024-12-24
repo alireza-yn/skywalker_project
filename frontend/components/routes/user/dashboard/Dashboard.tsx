@@ -10,13 +10,13 @@ type Props = {}
 
 const Dashboard = (props: Props) => {
   return (
-    <div className="container mx-auto px-4">
-      <Tabs defaultValue="account" className="w-ful">
+    <div className="container mx-auto px-4" dir='rtl'>
+      <Tabs defaultValue="account">
         <div className="mb-4 max-w-3xl mx-auto">
-          <TabsList className="flex w-full bg-transparent border-b-2 border-transparent">
+          <TabsList className="flex flex-row-reverse w-full bg-transparent border-b-2 border-transparent">
             <TabsTrigger 
               value="account" 
-              className="flex-1 gap-4 data-[state=active]:border-b-2 data-[state=active]:border-b-blue-700 data-[state=active]:text-blue-700 rounded-none shadow-none"
+              className="flex-1 gap-10 data-[state=active]:border-b-2 data-[state=active]:border-b-blue-700 data-[state=active]:text-blue-700 rounded-none shadow-none"
             >
               <span>پروفایل</span>
               <LayoutDashboard />

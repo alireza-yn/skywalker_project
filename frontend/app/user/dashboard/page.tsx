@@ -1,4 +1,4 @@
-import Dashboard from '@/components/user/dashboard/Dashboard'
+import Dashboard from '@/components/routes/user/dashboard/Dashboard'
 import React from 'react'
 
 type Props = {}

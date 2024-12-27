@@ -12,11 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormEvent, useRef, useState } from "react";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../../ui/input-otp";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { log } from "console";
 import { ArrowLeft, Loader2Icon } from "lucide-react";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { useRouter } from "next/navigation";
 export function SignUpForm({
   className,
   ...props
@@ -27,7 +28,7 @@ export function SignUpForm({
     const [value, setValue] = useState("")
     const [showOtp, setShowOtp] = useState(false)
     const [loading, setLoading] = useState(false)
-
+    const route = useRouter()
     const loginHandler = async (e:FormEvent)=>{
       e.preventDefault()
       setShowOtp(true)
@@ -39,7 +40,7 @@ export function SignUpForm({
             })
             const response = await request.data
             console.log(response);
-            if (response.status == 200 || response.status == 201){
+            if (response.success){
                 setShowOtp(true)
                 setLoading(false)
             }
@@ -57,10 +58,7 @@ export function SignUpForm({
                 console.log(err)
         }
     }
-    finally{
-      setLoading(false)
 
-    }
     }
 
 
@@ -76,7 +74,14 @@ export function SignUpForm({
             console.log(response);
   
             if (response.success){
+
                 Cookies.set("token", response.access)
+                if (response.intro){
+                  route.push('/user/dashboard')                  
+                }
+                else{
+                  route.push('/user/intro')
+                }
             }
         } catch (err: any) {
           setLoading(false)
@@ -88,15 +93,13 @@ export function SignUpForm({
                 console.log(err)
 
             }
-          } finally{
-            setLoading(false)
-          }
+          } 
         }
 
   return (
     <div className={cn(`flex flex-col gap-6`, className)} {...props}>
-      <div className={`w-auto h-auto ${showOtp ? "hidden" : ""}`}>
-        <Card className="overflow-hidden">
+      <div className={`w-[800px] h-[500px] ${showOtp ? "hidden" : ""}`}>
+        <Card className=" overflow-hidden ">
           <CardContent className="grid p-0 md:grid-cols-2">
             <form className="p-6 md:p-8" onSubmit={loginHandler}>
               <div className="flex flex-col gap-6">
@@ -128,7 +131,7 @@ export function SignUpForm({
             </form>
             <div className="relative hidden bg-muted md:block">
               <img
-                src="/placeholder.svg"
+                src="https://bairesdev.mo.cloudinary.net/blog/2023/07/debug.jpg?tx=w_1920,q_auto"
                 alt="Image"
                 className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
               />
@@ -136,25 +139,24 @@ export function SignUpForm({
           </CardContent>
         </Card>
         <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-          By clicking continue, you agree to our{" "}
-          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+         
         </div>
       </div>
 
-      <Card className={`${showOtp ? "flex flex-col" : "hidden"}`}>
+      <Card className={`${showOtp ? "flex flex-col" : "hidden"} transition-all duration-500`}>
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="flex items-center">
             <span className="flex-1">
               کد تایید
               </span>
-              <Button><span>
+              <Button variant={"outline"}><span>
                 بازگشت</span>
                 
                 <ArrowLeft className="w-4 h-4 ml-2" />
                 </Button>
             </CardTitle>
           <CardDescription>
-            <p>
+            <p className="mt-5">
 
             کد شش رقمی برای شماره تلفن {phone.current?.value} ارسال شده
             </p>

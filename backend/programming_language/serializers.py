@@ -12,3 +12,8 @@ class ProgrammerSkillSerializer(ModelSerializer):
     class Meta:
         model = ProgrammerSkill
         fields = '__all__'
+
+class ProgrammerExpertiseSerializer(ModelSerializer):
+    class Meta:
+        model = ProgrammerExpertise
+        fields = '__all__'

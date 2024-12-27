@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from .models import *
+from programming_language.serializers import ProgrammingLanguageSerializer
 class UserResumeSerializer(ModelSerializer):
     class Meta:
         model = UserResume
@@ -12,9 +13,11 @@ class VideoResumeSerializer(ModelSerializer):
 
 
 class UserLanguageSerializer(ModelSerializer):
+    language_name = ProgrammingLanguageSerializer()
     class Meta:
         model = UserLanguage
-        fields = '__all__'
+        fields = ['language_name']
+    
     
     
 
@@ -31,4 +34,9 @@ class UserDegreeSerializer(ModelSerializer):
 class UserSocialMediaLinksSerializer(ModelSerializer):
     class Meta:
         model = UserSocialMediaLinks
+        fields = '__all__'
+
+class UserExpertiseSerializer(ModelSerializer):
+    class Meta:
+        model = UserExpertise
         fields = '__all__'

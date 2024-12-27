@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import ClientProvider from "./clientProvider";
 import Header from "@/components/Layout/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,16 +30,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="rtl" data-theme="light">
+    <html lang="en" dir="rtl" data-theme="light" >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClientProvider>
-          <header className="sticky top-0">
-
-          <Header />
-          </header>
+         
           {children}
+          <Toaster position="top-center" />
         </ClientProvider>
       </body>
     </html>

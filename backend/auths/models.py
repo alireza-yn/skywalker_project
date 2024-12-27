@@ -58,6 +58,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, verbose_name="شناسه یکتا")
+    intro_completed = models.BooleanField(default=False)
+    
     def user_directory_path(instance, filename):
         extension = filename.split('.')[-1]
         new_filename = f"profile_{instance.email}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{extension}"
@@ -91,8 +93,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
     def __str__(self):
-        return self.username if self.username else self.email
-
+        if self.username:
+            return self.username
+        if self.email:
+            return self.email
+        return self.user_phone
 class OTP(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     otp_code = models.CharField(max_length=6)

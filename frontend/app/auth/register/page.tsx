@@ -1,4 +1,4 @@
-import { SignUpForm } from "@/components/Tools/Forms/signup-form";
+import { SignUpForm } from "@/components/routes/auth/sign-up/signup-form";
 import React from "react";
 
 type Props = {};

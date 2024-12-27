@@ -93,6 +93,7 @@ class OTPView(APIView):
                         "success": True,
                         "refresh": str(refresh),
                         "access": str(refresh.access_token),
+                        "intro":user.intro_completed
                     },
                     status=status.HTTP_200_OK,
                 )

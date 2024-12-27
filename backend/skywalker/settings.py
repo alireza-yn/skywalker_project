@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'programming_language',
     'user_resume',
+    'projects',
     
 ]
 

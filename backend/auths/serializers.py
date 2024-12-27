@@ -19,22 +19,23 @@ class RoleSerializer(ModelSerializer):
 
 class UserSerializer(ModelSerializer):
     user_roles = StringRelatedField(many=True, read_only=True)
-    user_resume = UserResumeSerializer()
-    user_language = StringRelatedField(many=True, read_only=True)
-
+    user_resume = UserResumeSerializer(many=True, read_only=True)
+    user_language = UserLanguageSerializer(many=True, read_only=True)
+    user_expertise = StringRelatedField(many=True, read_only=True)
     class Meta:
         model = User
         fields = [
             "id",
             "email",
-            "is_superuser",
             "username",
+            "image_profile",
             "password",
             "user_phone",
             "first_name",
             "last_name",
             "is_active",
             "is_staff",
+            "intro_completed",
             "unlimited",
             "created",
             "updated",
@@ -42,6 +43,7 @@ class UserSerializer(ModelSerializer):
             "user_roles",
             "user_resume",
             "user_language",
+            "user_expertise"
         ]
         # extra_kwargs = {'user_roles': {'read_only': True}}
 
@@ -61,3 +63,23 @@ class UserSerializer(ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+
+
+class CustomUserSerializer(ModelSerializer):
+    user_expertise = StringRelatedField(many=True, read_only=True)
+    
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "email",
+            "username",
+            "image_profile",
+            "user_phone",
+            "first_name",
+            "last_name",
+            "user_expertise"
+
+        ]   

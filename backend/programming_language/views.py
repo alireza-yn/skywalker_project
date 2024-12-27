@@ -15,3 +15,8 @@ class ProgrammingLanguageViewSet(ModelViewSet):
 class ProgrammerSkillViewSet(ModelViewSet):
     queryset = ProgrammerSkill.objects.all()    
     serializer_class = ProgrammerSkillSerializer
+
+
+class ProgrammerExpertiseViewSet(ModelViewSet):
+    queryset = ProgrammerExpertise.objects.all()    
+    serializer_class = ProgrammerExpertiseSerializer

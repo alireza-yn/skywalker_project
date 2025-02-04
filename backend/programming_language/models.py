@@ -38,6 +38,7 @@ class ProgrammerSkill (models.Model):
     ]
     name = models.CharField(max_length=100)
     skill_level = models.CharField(max_length=20, choices=SKILL_LEVEL, default='beginner')
+    image = models.ImageField(upload_to='static/programmer_skill',null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -48,6 +49,5 @@ class ProgrammerSkill (models.Model):
 
 class ProgrammerExpertise(TimeStampModel):
     title = models.CharField(max_length=100)
-    
     def __str__(self):
         return f"{self.title}"

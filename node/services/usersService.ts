@@ -1,17 +1,28 @@
-// داده‌های نمونه کاربران
-const users = [
-  { id: 1, name: 'Alice', age: 30 },
-  { id: 2, name: 'Bob', age: 25 },
-];
+import { UserModel } from "../model/userModel";
 
-// دریافت تمام کاربران
-const getAllUsers = () => {
-  return users;
+
+
+
+const createUser = async (phone:string,name:string,uuid:string,email:string) => {
+  try {
+    const user = await UserModel.create({phone,name,uuid,email});
+    console.log(user);
+ 
+    return user;
+  } catch (error) {
+    return false
+  }
+}
+
+const getUserByUUID = async (uuid: string) => {
+  try {
+    const user = await UserModel.findOne({ uuid });
+    console.log(user);
+ 
+    return user;
+  } catch (error) {
+    return false
+  }
 };
 
-// دریافت یک کاربر بر اساس شناسه
-const getUserById = (id: number) => {
-  return users.find(user => user.id === id);
-};
-
-export default { getAllUsers, getUserById };
+export { getUserByUUID };

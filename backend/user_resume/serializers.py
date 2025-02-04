@@ -18,8 +18,6 @@ class UserLanguageSerializer(ModelSerializer):
         model = UserLanguage
         fields = ['language_name']
     
-    
-    
 
 class UserSkillSerializer(ModelSerializer):
     class Meta:

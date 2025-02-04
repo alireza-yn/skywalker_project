@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'programming_language',
     'user_resume',
     'projects',
+    'ConsultHub',
+    'payments'
     
 ]
 
@@ -119,6 +121,7 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
     'REDOC_DIST': 'SIDECAR',
+    'LANGUAGE_CODE': 'fa',
     # OTHER SETTINGS
 }
 
@@ -141,8 +144,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5500",
+    "http://localhost:3001",
     "http://localhost:3000",
+    "http://localhost:3002",
 ]
 # CORS_ALLOW_ALL_ORIGINS = True
 
@@ -163,19 +167,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
 # STATIC_ROOT = "static/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,"static")
 ]
 
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 AUTH_USER_MODEL = 'auths.CustomUser'
 
@@ -218,3 +218,5 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+NODE_JS_URL = "http://localhost:3000"

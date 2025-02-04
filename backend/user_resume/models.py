@@ -82,7 +82,15 @@ class UserSocialMediaLinks(models.Model):
 class UserExpertise(TimeStampModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name="user_expertise",blank=True,null=True)
     expertise = models.ManyToManyField(ProgrammerExpertise,related_name="user_expertise",blank=True)
-    def __str__(self):
-        # اگر expertise داده‌ای داشته باشد، نام هر یک از آن‌ها را نمایش می‌دهیم
-        expertise_names = self.expertise.values_list('title', flat=True)  # فرض می‌کنیم فیلدی به نام 'name' در مدل ProgrammerExpertise وجود دارد
-        return ", ".join(expertise_names) if expertise_names else "No expertise"
+    
+    
+    
+    # def __str__(self):
+    #     if self.expertise.values_list('title',flat=True):
+    #         return self.expertise.values('title')
+    #     else :
+    #         return "none"
+    # def __str__(self):
+    #     # اگر expertise داده‌ای داشته باشد، نام هر یک از آن‌ها را نمایش می‌دهیم
+    #     expertise_names = self.expertise.values_list('title', flat=True)  # فرض می‌کنیم فیلدی به نام 'name' در مدل ProgrammerExpertise وجود دارد
+    #     return ", ".join(expertise_names) if expertise_names else "No expertise"

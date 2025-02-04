@@ -2,10 +2,19 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import counterReducer from '../slices/counterSlice';
+import userReducer from '../slices/userSlice'
+import chatReducer from '../slices/chatSlice'
+import consultReducer from '../slices/consultSlice'
+import feedbackReducer from '../slices/feedbackSlice'
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
+    user:userReducer,
+    chat:chatReducer,
+    consult:consultReducer,
+    feedback:feedbackReducer
+
   },
 });
 

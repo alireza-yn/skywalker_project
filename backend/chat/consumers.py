@@ -1,6 +1,6 @@
 from asgiref.sync import sync_to_async
 from skywalker.socketio_server import sio
-from auths.serializers import UserSerializer, CustomUser
+from auths.serializers_services import UserSerializer, CustomUser
 # دیکشنری برای نگهداری کاربران آنلاین با UUID
 import asyncio
 import time

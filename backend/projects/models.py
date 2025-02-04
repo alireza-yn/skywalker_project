@@ -15,12 +15,12 @@ class EducationPeoject(models.Model):
     language = models.ManyToManyField(ProgrammingLanguage,related_name='project_language')
     expertise = models.ManyToManyField(ProgrammerExpertise,related_name='project_expertise')
     description = models.TextField()
-    type_class = models.CharField(max_length=50,choices=class_type,default='عمومی') 
+    type_class = models.CharField(max_length=50,choices=class_type,default='public') 
     educational_heading = models.TextField(blank=True,null=True)
     educational_heading_file = models.FileField(upload_to='static/project/files')
     price = models.IntegerField()
     discount = models.IntegerField()
-    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='project_user')
+    users = models.ManyToManyField(User,related_name='project_user')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     start_date = models.DateTimeField(blank=True,null=True)
@@ -28,7 +28,6 @@ class EducationPeoject(models.Model):
     buffer_date = models.IntegerField(default=0)
     is_deleted = models.BooleanField(default=False)
     image = models.ImageField(upload_to='static/project/image_project',null=True,blank=True)
-    
+    time_line = models.TextField(null=True,blank=True)
 
 
-    

@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import ProjectTeam, Project
-from auths.serializers import UserSerializer
 class ProjectTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectTeam

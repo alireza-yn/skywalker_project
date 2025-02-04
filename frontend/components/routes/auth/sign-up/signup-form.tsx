@@ -11,13 +11,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { log } from "console";
 import { ArrowLeft, Loader2Icon } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useRouter } from "next/navigation";
+import { cookies } from "next/headers";
+import { log } from "console";
 export function SignUpForm({
   className,
   ...props
@@ -62,27 +63,30 @@ export function SignUpForm({
     }
 
 
-    const verifyOtpHandler = async (e:FormEvent)=>{
-        e.preventDefault()
+    const verifyOtpHandler = async ()=>{
         setLoading(true)
         try {
-            const request = await axios.post(`${process.env.server}/auths/verify_otp/`, {
+         
+            const request_server = await axios.post(`${process.env.server}/auths/verify_otp/`, {
                 phone: phone.current?.value,
                 otp:value
             })
-            const response = await request.data
+            const response = await request_server.data
             console.log(response);
-  
             if (response.success){
-
-                Cookies.set("token", response.access)
-                if (response.intro){
-                  route.push('/user/dashboard')                  
-                }
-                else{
-                  route.push('/user/intro')
-                }
+              Cookies.set('token',response.access)
+              Cookies.set('uuid',response.uuid)
             }
+            if (response.intro){
+                window.location.href = '/'
+            }else{
+              window.location.href = '/user/intro'
+            }
+            
+                
+              
+
+            
         } catch (err: any) {
           setLoading(false)
 
@@ -95,7 +99,11 @@ export function SignUpForm({
             }
           } 
         }
-
+    useEffect(()=>{
+      if(value.length === 6){
+        verifyOtpHandler()
+      }
+    },[value])
   return (
     <div className={cn(`flex flex-col gap-6`, className)} {...props}>
       <div className={`w-[800px] h-[500px] ${showOtp ? "hidden" : ""}`}>
@@ -149,7 +157,7 @@ export function SignUpForm({
             <span className="flex-1">
               کد تایید
               </span>
-              <Button variant={"outline"}><span>
+              <Button variant={"outline"} onClick={()=>setShowOtp(false)}><span>
                 بازگشت</span>
                 
                 <ArrowLeft className="w-4 h-4 ml-2" />
@@ -168,7 +176,7 @@ export function SignUpForm({
 
         maxLength={6}
         value={value}
-        onChange={(value) => setValue(value)}
+        onChange={(value) =>{ setValue(value);}}
       >
         <InputOTPGroup>
           <InputOTPSlot index={0} />

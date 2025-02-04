@@ -59,7 +59,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, verbose_name="شناسه یکتا")
     intro_completed = models.BooleanField(default=False)
-    
+    digital_wallet = models.IntegerField(default=0,verbose_name='کیف پول دیجیتال')
+    user_bio = models.CharField(max_length=1000, blank=True,null=True)
+    debugger_bio = models.CharField(max_length=1000, blank=True,null=True)
+    user_score = models.IntegerField(default=0,validators=[MaxValueValidator(5,"امتیاز نمیتواند بیشتر از 5 باشد")])
     def user_directory_path(instance, filename):
         extension = filename.split('.')[-1]
         new_filename = f"profile_{instance.email}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{extension}"

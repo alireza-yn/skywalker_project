@@ -13,6 +13,7 @@ router.register('register',viewset=UserViewSet)
 router.register('roles',viewset=RoleViewSet)
 urlpatterns = [
     path('',include(router.urls)),
+    path('admin_login/', AdminLoginView.as_view(), name='login'),
     path('login/', CustomLoginView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),

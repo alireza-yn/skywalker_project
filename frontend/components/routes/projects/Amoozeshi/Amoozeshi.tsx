@@ -12,13 +12,15 @@ import {
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import AmoozeshiCard from "@/components/Tools/cards/AmoozeshiCard";
 import Link from "next/link";
-
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import VipProject from "./VipProject";
+import Jumbotron from "./Jumbotron";
 
 
 
 type Props = {
   data: Main[];
-  user_id: any;
 };
 
 export interface Main {
@@ -70,7 +72,12 @@ export interface User {
   user_expertise: string[];
 }
 
-const Amoozeshi = ({ data, user_id }: Props) => {
+const Amoozeshi = ({ data }: Props) => {
+  const token = Cookies.get("token");
+  let j_token:any;
+  if (token) {
+    j_token = jwtDecode(token);
+  }
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedExpertises, setSelectedExpertises] = useState<string[]>([]);
 
@@ -101,29 +108,10 @@ const Amoozeshi = ({ data, user_id }: Props) => {
   });
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-4">
       {/* Header Section */}
-      <section>
-        <div
-          className="flex flex-col items-center justify-center w-full h-[500px] text-background gap-4 relative bg-gradient-to-b from-transparent to-black"
-          style={{
-            backgroundImage:
-              "linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/images/domingo.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <h1>آموزش‌های موجود</h1>
-          <div className="flex items-center gap-5">
-            <Link href={"#"}>نمایش آموزش‌ها</Link>
-            <Button variant="default">آموزش می‌دهم</Button>
-          </div>
-          <Input
-            placeholder="جستجو..."
-            className="w-3/4 absolute -bottom-5 bg-white h-14 rounded-xl text-foreground dark:text-background"
-          />
-        </div>
-      </section>
+      <Jumbotron />
+      <VipProject />
 
       {/* Cards Section */}
       <section className="container grid grid-cols-[25%_75%] gap-4 mx-auto py-12">
@@ -169,7 +157,7 @@ const Amoozeshi = ({ data, user_id }: Props) => {
         </div>
         <div className="grid grid-cols-1 gap-6">
           {filteredData.map((item) => (
-            <AmoozeshiCard key={item.id} item={item} user_id={user_id} />
+            <AmoozeshiCard key={item.id} item={item} user_id={j_token ? j_token.user_id : 0} />
           ))}
         </div>
       </section>

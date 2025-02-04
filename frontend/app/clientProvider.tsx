@@ -1,28 +1,44 @@
-// components/ClientProvider.tsx
 "use client";
 
+import Footer from "@/components/Layout/Footer";
 import Header from "@/components/Layout/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { store } from "@/redux/store/store";
 import { usePathname } from "next/navigation";
 import { Provider } from "react-redux";
 
+// List of paths where header and footer should not be shown
+const HIDDEN_LAYOUT_PATHS = [
+  '/user/intro',
+  '/new_project',
+  'user/dashboard'
+] as const;
+
 const ClientProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const pathname = usePathname();
 
-  const showHeader =
-    !pathname.includes("/user/intro") && !pathname.includes("/new_project");
+  // Check if current path is in the list of paths where layout should be hidden
+  const shouldHideLayout = HIDDEN_LAYOUT_PATHS.some(path => 
+    pathname.includes(path)
+  );
+
+  // Inverse the condition for better readability
+  const showLayout = !shouldHideLayout;
 
   return (
     <Provider store={store}>
       <ThemeProvider>
-        <header className="sticky top-0 z-50 bg-background ">{showHeader && <Header />}</header>
+        <header className="sticky top-0 z-50 bg-background">
+          {showLayout && <Header />}
+        </header>
         {children}
+        {showLayout && <Footer />}
       </ThemeProvider>
     </Provider>
   );
 };
 
 export default ClientProvider;
+

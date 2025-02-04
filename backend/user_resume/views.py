@@ -46,6 +46,7 @@ class AddUserResume(ViewSet):
     def create(self, request: Request):
         user_id = request.user.id
         programmer = request.data.get("programmer")
+        
         language = json.loads(request.data.get("language", "[]"))
         skill = json.loads(request.data.get("skill", "[]"))
         expertise = json.loads(request.data.get("expertise", "[]"))
@@ -75,18 +76,21 @@ class AddUserResume(ViewSet):
                     user_expertise, created = UserExpertise.objects.update_or_create(user=user)
                     user_expertise.expertise.set(expertise_objects)
 
+                
+                
+                
+                
                 # به‌روزرسانی یا ایجاد رزومه
-                UserResume.objects.create(
+                UserResume.objects.update_or_create(
                     user=user,
                     defaults={
-                        "programmer": programmer,
+                        "user": user,
+                        "title": cv_title,
+                        "description":cv_description,
                         "cv_file": cv_file,
-                        "cv_title": cv_title,
-                        "cv_description": cv_description,
                     },
                 )
-            User.objects.update(
-                id=user_id,intro_completed=True)
+                User.objects.filter(id=user_id).update(intro_completed=True)
             return Response({
                 "success": True,
                 "message": "Resume successfully updated or created."
@@ -96,3 +100,4 @@ class AddUserResume(ViewSet):
                 "success": False,
                 "error": str(e)
             })
+            

@@ -30,6 +30,8 @@ import { Blob } from "buffer";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
+
+
 interface FormDataState {
   is_private: boolean;
   class_size: number;
@@ -121,6 +123,12 @@ const NewProject = () => {
   const router = useRouter()
   const handleSubmit = async () => {
     const token = Cookies.get("token")
+    if (!token){
+
+
+      return false
+    }
+
     let user:any = jwtDecode(token || "")
     console.log(formData)
 
@@ -178,6 +186,7 @@ const NewProject = () => {
           <div className="w-full h-44 flex items-center justify-center border rounded-lg">
             <PlayCircle />
           </div>
+          
           <Card
             className={`w-full h-auto`}
           >

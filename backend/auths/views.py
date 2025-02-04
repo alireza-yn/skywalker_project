@@ -4,16 +4,20 @@ from rest_framework.request import Request
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializers import *
+from .serializers_services.userSerializers import UserSerializers as testSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 import random
-
+from drf_spectacular.utils import extend_schema_view,extend_schema
+from .services import UserService
+from rest_framework_simplejwt.tokens import RefreshToken
+from .utils import IsStaffPermission
 
 class UserViewSet(ModelViewSet):
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-
+    serializer_class = testSerializer
+    # permission_classes=[IsAdminUser,IsStaffPermission]
 
 class GetUserData(RetrieveAPIView):
     queryset = CustomUser.objects.all()
@@ -31,7 +35,7 @@ class RoleViewSet(ModelViewSet):
     serializer_class = RoleSerializer
 
 
-class CustomLoginView(APIView):
+class CustomLoginView(APIView,UserService):
     def post(self, request: Request):
         phone = request.data.get("phone")
         if not phone:
@@ -39,61 +43,22 @@ class CustomLoginView(APIView):
                 {"error": "Phone number is required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        user = User.objects.filter(user_phone=phone).first()
-        otp_exist = OTP.objects.filter(user=user).first()
-        if otp_exist:
-            otp_exist.delete()
-        
-        otp_code = random.randint(100000, 999999)
-        if user:
-            otp = OTP.objects.create(user=user, otp_code=otp_code)
-            if otp:
-                return Response(
-                    {"success": True, "otp": otp.otp_code},
-                    status=status.HTTP_200_OK,
-                )
-        else:
-            new_user = User.objects.create(user_phone=phone)
-            otp = OTP.objects.create(user=new_user, otp_code=otp_code)
-            return Response(
-                {"success": True, "otp": otp_code},
-                status=status.HTTP_201_CREATED,
-            )
+        return self.create_user_by_phone(phone=phone)
 
 
-class OTPView(APIView):
+
+class AdminLoginView(APIView,UserService):   
+    def post(self, request: Request):
+        return self.admin_login(request=request)
+
+
+class OTPView(APIView,UserService):
     def post(self, request: Request):
         phone = request.data.get("phone")
         otp_code = request.data.get("otp")
-        if not phone or not otp_code:
-            return Response(
-                {"error": "Phone number and OTP code are required"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        user = User.objects.filter(user_phone=phone).first()
-        if not user:
-            return Response(
-                {"error": "User not found"},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        otp = OTP.objects.filter(user=user, otp_code=otp_code).first()
-        if not otp:
-            return Response(
-                {"error": "Invalid OTP code"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        else:
-            if otp:
-                otp.delete()
-                user.is_active = True
-                user.save()
-                refresh = RefreshToken.for_user(user)
-                return Response(
-                    {
-                        "success": True,
-                        "refresh": str(refresh),
-                        "access": str(refresh.access_token),
-                        "intro":user.intro_completed
-                    },
-                    status=status.HTTP_200_OK,
-                )
+        if otp_code is None and phone is None :
+            return Response({"error":"phone or otp is required"},status=status.HTTP_400_BAD_REQUEST)
+        return self.activate_user(phone=phone,otp_code=otp_code)            
+        
+      
+# 1040240042

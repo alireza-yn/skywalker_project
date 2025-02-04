@@ -4,8 +4,13 @@ from management.views import *
 from tasks.views import *
 from programming_language.views import *
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from .views import * 
 from user_resume.views import *
 from projects.views import *
+from ConsultHub.views import *
+
+
+
 router = DefaultRouter()
 router.register('project',viewset=ProjectViewSet)
 router.register('team_project',viewset=ProjectTeamViewSet)
@@ -32,7 +37,6 @@ router.register(r'programmer-exprertise', ProgrammerExpertiseViewSet)
 #endregion
 
 
-
 #region project router
 router.register(r'create_project', ProjectViewSet,basename="project_created")
 router.register(r'new_project', CreateProjectAPIView,basename="new_project")
@@ -40,8 +44,25 @@ router.register(r'new_project', CreateProjectAPIView,basename="new_project")
 #endregion
 
 
+#region ConsultHub Router
+router.register(r'consult-hub', ConsultHubView,basename="consult-hub")
+router.register(r'debug-hub', DebuggerHubView,basename="debug-hub")
+#endregion
+
+
+
+#region Management Router
+
+#endregion
+
+
 urlpatterns = [
     path('v1/',include(router.urls)),
+    path('v1/user-by-role/',UsersByRoleListView.as_view(),name='user-by-role'),
+    path('v1/get-user-info/',GetUserInfo.as_view(),name='get-user-info'),
+    path('v1/get-user-consult/',DebuggerApplicatorView.as_view(),name='get-user-info'),
+    path('v1/get-request-debug/',RequestDebugeFromUsers.as_view(),name='get-request-debug'),
+    path('v1/get-user-debug/',UserOpendDebugList.as_view(),name='get-user-debug'),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc')

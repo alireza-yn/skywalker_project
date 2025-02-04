@@ -18,8 +18,6 @@ type Props = {
 }
 
 const AmoozeshiCard = ({item,user_id}: Props) => {
-console.log(user_id,item.user.id)
-
   return (
     <Card key={item.id} className="flex flex-col">
     <CardHeader className="flex">

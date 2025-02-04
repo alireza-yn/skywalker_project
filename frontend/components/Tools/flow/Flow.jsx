@@ -17,14 +17,14 @@ import {
     { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
   ];
   const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
-type Props = {}
 
-const Flow = (props: Props) => {
+
+const Flow = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
  
   const onConnect = useCallback(
-    (params:any) => setEdges((eds) => addEdge(params, eds)),
+    (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges],
   );
   return (

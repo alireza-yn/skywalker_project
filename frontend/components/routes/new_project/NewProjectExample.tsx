@@ -11,7 +11,7 @@ import { ArrowLeft, ArrowRight, PlayCircle, Search } from 'lucide-react';
 const ScrollableNewProject = () => {
   const [currentCard, setCurrentCard] = useState(1);
   const [selectedValue, setSelectedValue] = useState("comfortable");
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const cardRefs = useRef<(HTMLDivElement)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (value: string) => {
@@ -68,7 +68,7 @@ const ScrollableNewProject = () => {
         {[1, 2, 3, 4, 5].map((cardNumber) => (
           <Card
             key={cardNumber}
-            ref={(el) => (cardRefs.current[cardNumber - 1] = el)}
+            ref={(el:any) => (cardRefs.current[cardNumber - 1] = el)}
             data-card={cardNumber}
             className={`w-full mb-8 transition-opacity duration-500 ${
               cardNumber > currentCard ? 'opacity-0 invisible h-0 overflow-hidden' : 'opacity-100 visible'

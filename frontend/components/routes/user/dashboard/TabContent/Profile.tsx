@@ -75,6 +75,7 @@ export interface UserResume {
   user:        number;
 }
 type Props = {
+  is_me : boolean;
   user: any | null;
 };
 
@@ -129,10 +130,17 @@ const Profile = (props: Props) => {
               </div>
             </div>
             <div className="flex-1"></div>
+            {
+              props.is_me ?
             <Button variant={"outline"}>
+              
               <Edit />
               <span>ویرایش اطلاعات</span>
+            </Button> :
+            <Button>
+              درخواست مشاوره
             </Button>
+            }
           </CardTitle>
           <CardDescription></CardDescription>
         </CardHeader>
@@ -209,10 +217,13 @@ const Profile = (props: Props) => {
               </div>
             </div>
             <div className="flex-1"></div>
+            {
+              props.is_me &&
             <Button variant={"outline"} className="text-blue-500">
               <Plus />
               <span>مهارت جدید</span>
             </Button>
+            }
           </CardTitle>
           <CardDescription></CardDescription>
         </CardHeader>
@@ -253,10 +264,13 @@ const Profile = (props: Props) => {
               </div>
             </div>
             <div className="flex-1"></div>
+            {
+              props.is_me &&
             <Button variant={"outline"}>
               <Plus />
               <span>رزومه جدید</span>
             </Button>
+            }
           </CardTitle>
           <CardDescription></CardDescription>
         </CardHeader>
